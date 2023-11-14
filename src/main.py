@@ -72,7 +72,7 @@ def main():
         (year, month, day, hour, minute, seconds) = t[0:6]
         display.fb.fill(0)
         display.fb.rect(0, 0, 64, 64, 0xff20)
-        display.fb.text(f"{day:02d}.{month:02d}.{year:04d}", 0, 24, color)
+        display.fb.text(f"{day:02d}.{month:02d}.{str(year)[2:]}", 0, 24, color)
         display.fb.text(f"{hour:02d}:{minute:02d}:{seconds:02d}", 0, 34, color)
         display.show()
         time.sleep(0.1)
