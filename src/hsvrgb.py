@@ -1,3 +1,4 @@
+# https://stackoverflow.com/a/26856771
 def rgb565(red, green, blue):
     return (int(red / 255 * 31) << 11) | (int(green / 255 * 63) << 5) | (int(blue / 255 * 31))
 

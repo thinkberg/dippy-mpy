@@ -15,6 +15,14 @@ I2S implementation that is a bit out of date.
 3. write the contents of [src/](src) into the root of the device
 4. reset device to start
 
+## References
+
+- ledmatrix - [ledmatrix](https://github.com/Winkelkatze/ledmatrix) code compiled into firmware bin
+- mpy-miniterm - [dev tool](https://github.com/jeffmakes/mpy-miniterm) for syncing code to the device
+- hsv2rgb - [some stackoverflow answer](https://stackoverflow.com/a/26856771)
+- CEST time conversion - [from a discussion]('https://github.com/orgs/micropython/discussions/11173) on the micropython
+  forum
+
 ## [License](LICENSE.txt)
 
 ```
