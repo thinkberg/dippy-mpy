@@ -8,6 +8,13 @@ added [ledmatrix library](https://github.com/Winkelkatze/ledmatrix).
 The compilation is not straightforward as it uses a modified
 I2S implementation that is a bit out of date.
 
+## Running
+
+1. flash the firmware bin using esptool.py
+2. copy [src/config.json.tmpl](src/config.json.tmpl) to src/config.json and set your SSID and password
+3. write the contents of [src/](src) into the root of the device
+4. reset device to start
+
 ## [License](LICENSE.txt)
 
 ```
