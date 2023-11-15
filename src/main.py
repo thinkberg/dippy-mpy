@@ -7,6 +7,8 @@ import ntptime
 import ledmatrix
 import framebuf
 
+from hsvrgb import hsv_to_rgb565
+
 
 class Display:
     _buf = None
@@ -37,26 +39,39 @@ def localtime():
     return cet
 
 
+def rgb(r, g, b):
+    """RGB565 - (31,63,31)"""
+    return (r << 11) | (g << 5) | b
+
+
 def main():
-    (ssid, password) = credentials["network"]
+    try:
+        (ssid, password) = credentials["network"]
 
-    nic = network.WLAN(network.STA_IF)
-    if not nic.isconnected():
-        nic.active(True)
-        nic.connect(ssid, password)
-        while not nic.isconnected():
-            pass
-    else:
-        print("Already connected")
+        nic = network.WLAN(network.STA_IF)
+        if not nic.isconnected():
+            nic.active(True)
+            nic.connect(ssid, password)
+            tries = 10
+            while not nic.isconnected():
+                print(tries)
+                tries = tries - 1
+                if tries <= 0:
+                    raise OSError
+                pass
+            print("NIC: connection established")
+        else:
+            print("NIC: already connected")
 
-    print("Connection successful")
-    print(nic.ifconfig())
+        print(nic.ifconfig())
 
-    rtc = RTC()
-    ntptime.settime()
-    (year, month, day, weekday, hours, minutes, seconds, subseconds) = rtc.datetime()
-    print("UTC Time: ")
-    print((year, month, day, hours, minutes, seconds))
+        rtc = RTC()
+        ntptime.settime()
+        (year, month, day, weekday, hours, minutes, seconds, subseconds) = rtc.datetime()
+        print("UTC Time: ")
+        print((year, month, day, hours, minutes, seconds))
+    except OSError as e:
+        print(f"NIC: connection could not be established {e}")
 
     # initialize the LED display
     ledmatrix.init(io_colors=(25, 26, 27, 14, 12, 13),
@@ -65,13 +80,21 @@ def main():
     ledmatrix.set_brightness(62)
 
     display = Display()
-    color = 0xffff
+    color = rgb(31, 63, 31)
 
+    w = 0.0
     while True:
+        w = (w + 2) % 360
         t = localtime()
         (year, month, day, hour, minute, seconds) = t[0:6]
         display.fb.fill(0)
-        display.fb.rect(0, 0, 64, 64, 0xff20)
+        display.fb.rect(0, 0, 64, 64, rgb(31, 63, 0))
+
+        display.fb.rect(2, 2, 10, 10, rgb(31, 0, 0), True)
+        display.fb.rect(13, 2, 10, 10, rgb(0, 63, 0), True)
+        display.fb.rect(24, 2, 10, 10, rgb(0, 0, 31), True)
+        display.fb.rect(35, 2, 10, 10, hsv_to_rgb565(w/360.0, 1, 1), True)
+
         display.fb.text(f"{day:02d}.{month:02d}.{str(year)[2:]}", 0, 24, color)
         display.fb.text(f"{hour:02d}:{minute:02d}:{seconds:02d}", 0, 34, color)
         display.show()
