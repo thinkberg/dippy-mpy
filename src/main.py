@@ -1,3 +1,5 @@
+import sys
+
 from machine import RTC
 
 import time
@@ -52,12 +54,13 @@ def main():
         if not nic.isconnected():
             nic.active(True)
             nic.connect(ssid, password)
-            tries = 10
+            tries = 100
             while not nic.isconnected():
-                print(tries)
+                sys.stdout.write(".")
                 tries = tries - 1
                 if tries <= 0:
                     raise OSError
+                time.sleep(0.2)
                 pass
             print("NIC: connection established")
         else:
