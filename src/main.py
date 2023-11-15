@@ -71,8 +71,7 @@ def main():
         rtc = RTC()
         ntptime.settime()
         (year, month, day, weekday, hours, minutes, seconds, subseconds) = rtc.datetime()
-        print("UTC Time: ")
-        print((year, month, day, hours, minutes, seconds))
+        print(f"UTC Time: {(year, month, day, hours, minutes, seconds)}")
     except OSError as e:
         print(f"NIC: connection could not be established {e}")
 
